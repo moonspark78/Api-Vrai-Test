@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import './style.css';
 import CardPokemonDetail from './CardPokemonDetail';
 
@@ -14,6 +14,16 @@ export default function App() {
     { name: 'Pikachu' },
     { name: 'Salameche' },
   ]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch("https://pokeapi.co/api/v2/pokemon/");
+      const data = await response.json();
+      console.log(data.results);
+      setPokemons(data.results);
+    };
+    fetchData();
+  },[]);
 
   return (
     <div>
