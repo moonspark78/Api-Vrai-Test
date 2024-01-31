@@ -8,7 +8,7 @@ export default function CardPokemonDetail(props) {
         color: 'white',
         padding: '10px',
         margin: '15px',
-        width: '100px',
+        width: '120px',
       }}
     >
       <h2>{props.name}</h2>
