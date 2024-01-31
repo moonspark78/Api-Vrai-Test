@@ -4,7 +4,8 @@ import CardPokemonDetail from './CardPokemonDetail';
 
 /* 
   1 - Récupérer tous les pokémons sur https://pokeapi.co/api/v2/pokemon/ et les afficher sur les cartes noires
-  2 - Au clic sur une des cartes noires on souhaite afficher une nouvelle carte grise, avec le nom du pokémon (name), le poids (weight) et la taille (height) https://pokeapi.co/api/v2/pokemon/{name ou id}
+  2 - Au clic sur une des cartes noires on souhaite afficher une nouvelle carte grise, avec le nom du pokémon (name), 
+            le poids (weight) et la taille (height) https://pokeapi.co/api/v2/pokemon/{name ou id}
   3 - Créer un champ de recherche pour chercher un pokémon et l'afficher dans la carte grise
   4 - Propositions de refacto
 */
@@ -14,6 +15,7 @@ export default function App() {
     { name: 'Pikachu' },
     { name: 'Salameche' },
   ]);
+  const [selectedPokemons, setSelectedPokemons] = useState(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,13 +27,30 @@ export default function App() {
     fetchData();
   },[]);
 
+  const handlePokemonClick = async (pokemonName) => {
+    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
+    const data = await response.json();
+    setSelectedPokemons(data);
+  };
+
+
   return (
     <div>
       <h1>Liste de pokémons</h1>
       <div style={{ textAlign: 'center' }}>
+
         Emplacement de la carte de détail d'un pokémon ce sera le composant
         CardPokemonDetail
+
+        {selectedPokemons && (
+           <CardPokemonDetail
+              name={selectedPokemons.name}
+              height={selectedPokemons.height}
+              weight={selectedPokemons.weight}
+            />
+        )}
       </div>
+
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         {pokemons.map((pokemon) => (
           <div
@@ -44,6 +63,7 @@ export default function App() {
               width: '100px',
               cursor: 'pointer',
             }}
+            onClick={() => handlePokemonClick(pokemon.name)}
           >
             <h3>{pokemon.name}</h3>
           </div>
